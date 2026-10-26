@@ -1,18 +1,18 @@
 # Projeto: Gestão de Orçamentos
 
-O foco técnico desta solução é demonstrar engenharia aplicada em ASP.NET Core 10 e SQL Server, com responsabilidades bem separadas, API HTTP e processamento em segundo plano. Em um cenário com 100 mil orçamentos fictícios, a otimização da consulta de vencimentos reduziu as leituras lógicas de 1.044 para 7 com um índice filtrado.
+O **foco técnico** desta solução é demonstrar engenharia aplicada em ASP.NET Core 10 e SQL Server, com responsabilidades bem separadas, API HTTP e processamento em segundo plano. Em um cenário com 100 mil orçamentos fictícios, a otimização da consulta de vencimentos reduziu as leituras lógicas de 1.044 para 7 com um índice filtrado.
 
 Constatando como estes recursos do ASP.NET Core e do SQL Server podem trabalhar da melhor maneira juntos:
 
-- MVC e Razor Pages;
-- API HTTP;
-- Persistência com Entity Framework Core;
-- Consultas SQL;
-- Tarefas em segundo plano;
-- Integração com um serviço externo;
-- Layout centralizado perante hierarquia de estilos e foco em ser clean.
+- **MVC** e **Razor Pages**;
+- **API** HTTP;
+- **Persistência** com Entity Framework Core;
+- **Consultas SQL**;
+- Tarefas em **segundo plano**;
+- Integração com um **serviço externo**;
+- **Layout centralizado** perante hierarquia de estilos e foco em ser clean.
 
-Esta solução foi pensada para uso pessoal, não contemplando segurança aprimorada e nem login.
+Esta solução foi pensada para uso pessoal, **não** contemplando segurança aprimorada e nem login.
 
 # Fluxo funcional da aplicação
 
