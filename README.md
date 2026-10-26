@@ -1,21 +1,3 @@
-## Sumário
-
-- [Projeto: Gestão de Orçamentos](#projeto-gesto-de-oramentos)
-- [Fluxo funcional da aplicação](#fluxo-funcional-da-aplicao)
-  - [Imagens da aplicação](#imagens-da-aplicao)
-  - [O que a aplicação faz?](#o-que-a-aplicao-faz)
-  - [Arquitetura e escolhas técnicas](#arquitetura-e-escolhas-tcnicas)
-    - [Padrões e modelos](#padres-e-modelos)
-    - [Persistência e processamento](#persistncia-e-processamento)
-  - [Fluxo dos orçamentos](#fluxo-dos-oramentos)
-  - [API de consulta](#api-de-consulta)
-  - [Medição da consulta de vencimentos](#medio-da-consulta-de-vencimentos)
-  - [Requisitos e desenvolvimento](#requisitos-e-desenvolvimento)
-  - [Publicar no Windows x64](#publicar-no-windows-x64)
-  - [Testes](#testes)
-
----
-
 # Projeto: Gestão de Orçamentos
 
 O foco técnico desta solução é demonstrar engenharia aplicada em ASP.NET Core 10 e SQL Server, com responsabilidades bem separadas, API HTTP e processamento em segundo plano. Em um cenário com 100 mil orçamentos fictícios, a otimização da consulta de vencimentos reduziu as leituras lógicas de 1.044 para 7 com um índice filtrado.
