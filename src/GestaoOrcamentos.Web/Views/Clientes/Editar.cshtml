@@ -1,16 +1,17 @@
 @model ClienteFormulario
 @{
     ViewData["Title"] = "Editar cliente";
+    ViewData["PageDescription"] = "Atualize as informações usadas no contato e nos próximos orçamentos.";
 }
 
 <div class="row justify-content-center">
     <div class="col-lg-8">
-        <h1 class="h2 mb-3">Editar cliente</h1>
-
         <form asp-action="Editar" asp-route-id="@Model.Id" method="post">
             <partial name="_Campos" model="Model" />
-            <button type="submit" class="btn btn-primary">Salvar alterações</button>
-            <a asp-action="Detalhes" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar alterações</button>
+                <a asp-action="Detalhes" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
         </form>
     </div>
 </div>

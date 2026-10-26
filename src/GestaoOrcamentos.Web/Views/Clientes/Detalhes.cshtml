@@ -1,24 +1,22 @@
 @model ClienteDetalhes
 @{
     ViewData["Title"] = Model.Cliente.Nome;
+    ViewData["PageDescription"] = "Dados de contato, endereço e histórico de orçamentos deste cliente.";
 }
 
-<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-    <h1 class="h2 mb-0">@Model.Cliente.Nome</h1>
-    <div>
-        <a asp-action="Editar" asp-route-id="@Model.Cliente.Id" class="btn btn-primary">Editar</a>
-        <a asp-controller="Orcamentos" asp-action="Criar" asp-route-clienteId="@Model.Cliente.Id" class="btn btn-outline-primary">Novo orçamento</a>
-        <a asp-action="Excluir" asp-route-id="@Model.Cliente.Id" class="btn btn-outline-danger">Excluir</a>
-        <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
-    </div>
-</div>
+@section PageActions {
+    <a asp-action="Editar" asp-route-id="@Model.Cliente.Id" class="btn btn-primary">Editar</a>
+    <a asp-controller="Orcamentos" asp-action="Criar" asp-route-clienteId="@Model.Cliente.Id" class="btn btn-outline-primary">Novo orçamento</a>
+    <a asp-action="Excluir" asp-route-id="@Model.Cliente.Id" class="btn btn-outline-danger">Excluir</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+}
 
 @if (TempData["Mensagem"] is string mensagem)
 {
     <div class="alert alert-success" role="status">@mensagem</div>
 }
 
-<h2 class="h5">Contato</h2>
+<h2>Contato</h2>
 <dl class="row">
     <dt class="col-sm-3">Pessoa de contato</dt>
     <dd class="col-sm-9">@(Model.Cliente.PessoaContato ?? "Não informado")</dd>
@@ -28,7 +26,7 @@
     <dd class="col-sm-9">@(Model.Cliente.Email ?? "Não informado")</dd>
 </dl>
 
-<h2 class="h5">Endereço</h2>
+<h2>Endereço</h2>
 <dl class="row">
     <dt class="col-sm-3">CEP</dt>
     <dd class="col-sm-9">@(Model.Cliente.Cep ?? "Não informado")</dd>
@@ -48,11 +46,11 @@
 
 @if (!string.IsNullOrWhiteSpace(Model.Cliente.Observacoes))
 {
-    <h2 class="h5">Observações</h2>
-    <p style="white-space: pre-wrap">@Model.Cliente.Observacoes</p>
+    <h2>Observações</h2>
+    <p class="text-preserve">@Model.Cliente.Observacoes</p>
 }
 
-<h2 class="h5 mt-4">Orçamentos</h2>
+<h2>Orçamentos</h2>
 @if (Model.Orcamentos.Count == 0)
 {
     <p>Nenhum orçamento para este cliente.</p>
@@ -60,7 +58,7 @@
 else
 {
     <div class="table-responsive">
-        <table class="table table-striped align-middle">
+        <table class="table app-table">
             <thead>
                 <tr>
                     <th scope="col">Número</th>

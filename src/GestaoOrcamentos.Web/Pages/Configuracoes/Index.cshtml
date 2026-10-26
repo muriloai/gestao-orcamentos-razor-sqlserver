@@ -2,12 +2,11 @@
 @model GestaoOrcamentos.Web.Pages.Configuracoes.IndexModel
 @{
     ViewData["Title"] = "Configurações do negócio";
+    ViewData["PageDescription"] = "Esses dados identificam o seu negócio nas propostas impressas.";
 }
 
 <div class="row justify-content-center">
     <div class="col-lg-8">
-        <h1 class="h2 mb-3">Configurações do negócio</h1>
-
         @if (TempData["Mensagem"] is string mensagem)
         {
             <div class="alert alert-success" role="status">@mensagem</div>
@@ -35,7 +34,7 @@
                 </div>
             </div>
 
-            <h2 class="h5 mt-4">Endereço</h2>
+            <h2>Endereço</h2>
             <div class="row g-3 mb-3">
                 <div class="col-md-4">
                     <label asp-for="Configuracao.Cep" class="form-label"></label>
@@ -76,7 +75,9 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Salvar configurações</button>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar configurações</button>
+            </div>
         </form>
     </div>
 </div>

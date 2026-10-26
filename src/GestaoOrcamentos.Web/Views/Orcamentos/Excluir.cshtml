@@ -1,12 +1,14 @@
 @model Orcamento
 @{
     ViewData["Title"] = $"Excluir orçamento {Model.Numero}";
+    ViewData["PageDescription"] = "A exclusão é permitida apenas para rascunhos.";
 }
 
-<h1 class="h2">Excluir orçamento @Model.Numero</h1>
 <p>Tem certeza de que deseja excluir o rascunho <strong>@Model.Titulo</strong>?</p>
 
 <form asp-action="Excluir" asp-route-id="@Model.Id" method="post">
-    <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
-    <a asp-action="Detalhes" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-danger">Confirmar exclusão</button>
+        <a asp-action="Detalhes" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
 </form>

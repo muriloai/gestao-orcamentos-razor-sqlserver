@@ -1,11 +1,10 @@
 @model Orcamento
 @{
     ViewData["Title"] = $"Orçamento {Model.Numero}";
+    ViewData["PageDescription"] = Model.Titulo;
 }
 
-<h1 class="h2 mb-3">Orçamento @Model.Numero</h1>
-
-<div class="d-flex flex-wrap gap-2 mb-4">
+@section PageActions {
     @if (Model.Situacao == SituacaoOrcamento.Rascunho)
     {
         <a asp-action="Editar" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
@@ -34,7 +33,7 @@
         <button type="submit" class="btn btn-outline-primary">Duplicar como rascunho</button>
     </form>
     <a asp-action="Imprimir" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Imprimir ou salvar em PDF</a>
-</div>
+}
 
 @if (TempData["Mensagem"] is string mensagem)
 {
@@ -55,14 +54,14 @@
 
 @if (Model.Situacao != SituacaoOrcamento.Rascunho)
 {
-    <h2 class="h5">Dados do negócio registrados</h2>
+    <h2>Dados do negócio registrados</h2>
     <partial name="_DadosParte" model="Model.NegocioRegistrado" />
-    <h2 class="h5">Dados do cliente registrados</h2>
+    <h2>Dados do cliente registrados</h2>
     <partial name="_DadosParte" model="Model.ClienteRegistrado" />
 }
 
 <div class="table-responsive">
-    <table class="table table-striped align-middle">
+    <table class="table app-table">
         <thead><tr><th>Descrição</th><th class="text-end">Quantidade</th><th>Unidade</th><th class="text-end">Preço unitário</th><th class="text-end">Subtotal</th></tr></thead>
         <tbody>
             @foreach (var item in Model.Itens.OrderBy(item => item.Id))
@@ -82,9 +81,7 @@
 
 @if (!string.IsNullOrWhiteSpace(Model.Observacoes))
 {
-    <h2 class="h5">Observações</h2>
-    <p style="white-space: pre-wrap">@Model.Observacoes</p>
+    <h2>Observações</h2>
+    <p class="text-preserve">@Model.Observacoes</p>
 }
 
-<a asp-action="Criar" class="btn btn-outline-primary">Novo orçamento</a>
-<a asp-action="Index" class="btn btn-outline-secondary">Voltar à lista</a>

@@ -1,11 +1,10 @@
 @model RelatorioOrcamentos
 @{
     ViewData["Title"] = "Relatório de orçamentos";
+    ViewData["PageDescription"] = "Consulte quantidades e valores por situação no período escolhido.";
 }
 
-<h1 class="h2 mb-4">Relatório de orçamentos</h1>
-
-<form asp-action="Orcamentos" method="get" class="row g-3 align-items-end mb-4">
+<form asp-action="Orcamentos" method="get" class="row g-3 align-items-end filter-form">
     <div asp-validation-summary="All" class="text-danger" role="alert"></div>
     <div class="col-sm-4 col-md-3">
         <label for="dataInicial" class="form-label">Emissão a partir de</label>
@@ -22,10 +21,10 @@
     </div>
 </form>
 
-<p>Período: @Model.DataInicial.ToString("dd/MM/yyyy") a @Model.DataFinal.ToString("dd/MM/yyyy").</p>
+<p class="report-period">Período: @Model.DataInicial.ToString("dd/MM/yyyy") a @Model.DataFinal.ToString("dd/MM/yyyy").</p>
 
 <div class="table-responsive">
-    <table class="table table-striped align-middle">
+    <table class="table app-table">
         <thead>
             <tr>
                 <th scope="col">Situação</th>

@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@{
+    bool IsCurrentPath(string segment) => Context.Request.Path.StartsWithSegments(segment);
+}
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
@@ -7,31 +10,72 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
-    <header>
-        <nav class="navbar bg-white border-bottom" aria-label="Navegação principal">
-            <div class="container">
-                <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">Gestão de orçamentos</a>
-                <a class="nav-link" asp-controller="Clientes" asp-action="Index">Clientes</a>
-                <a class="nav-link" asp-controller="Orcamentos" asp-action="Index">Orçamentos</a>
-                <a class="nav-link" asp-controller="Relatorios" asp-action="Orcamentos">Relatórios</a>
-                <a class="nav-link" asp-controller="Alertas" asp-action="Vencidos">Orçamentos vencidos</a>
-                <a class="nav-link" asp-controller="Orcamentos" asp-action="Criar">Novo orçamento</a>
-                <a class="nav-link" asp-page="/Configuracoes/Index">Configurações</a>
+<body class="app-shell">
+    <header class="app-header">
+        <nav class="app-navbar" aria-label="Navegação principal">
+            <div class="container app-navbar-inner">
+                <a class="app-brand" asp-controller="Home" asp-action="Index">
+                    <span class="app-brand-mark" aria-hidden="true">G</span>
+                    <span class="app-brand-copy">
+                        <span class="app-brand-name">Gestão de orçamentos</span>
+                        <span class="app-brand-caption">Organização do negócio</span>
+                    </span>
+                </a>
+
+                <div class="app-nav-links">
+                    <a class="app-nav-link @(IsCurrentPath("/Clientes") ? "is-active" : string.Empty)"
+                       aria-current="@(IsCurrentPath("/Clientes") ? "page" : null)"
+                       asp-controller="Clientes" asp-action="Index">Clientes</a>
+                    <a class="app-nav-link @(IsCurrentPath("/Orcamentos") ? "is-active" : string.Empty)"
+                       aria-current="@(IsCurrentPath("/Orcamentos") ? "page" : null)"
+                       asp-controller="Orcamentos" asp-action="Index">Orçamentos</a>
+                    <a class="app-nav-link @(IsCurrentPath("/Relatorios") ? "is-active" : string.Empty)"
+                       aria-current="@(IsCurrentPath("/Relatorios") ? "page" : null)"
+                       asp-controller="Relatorios" asp-action="Orcamentos">Relatórios</a>
+                    <a class="app-nav-link @(IsCurrentPath("/Alertas") ? "is-active" : string.Empty)"
+                       aria-current="@(IsCurrentPath("/Alertas") ? "page" : null)"
+                       asp-controller="Alertas" asp-action="Vencidos">Vencidos</a>
+                    <a class="app-nav-link @(IsCurrentPath("/Configuracoes") ? "is-active" : string.Empty)"
+                       aria-current="@(IsCurrentPath("/Configuracoes") ? "page" : null)"
+                       asp-page="/Configuracoes/Index">Configurações</a>
+                    <a class="btn btn-primary app-nav-cta" asp-controller="Orcamentos" asp-action="Criar">Novo orçamento</a>
+                </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted py-3">
-        <div class="container">
-            Gestão de orçamentos
+    <main role="main" class="app-main">
+        <div class="container app-container">
+            <header class="page-header">
+                <div class="page-heading-group">
+                    <p class="page-eyebrow">@(ViewData["PageSection"] ?? "GESTÃO DO NEGÓCIO")</p>
+                    <h1 class="page-title">@(ViewData["PageHeading"] ?? ViewData["Title"])</h1>
+                    @if (ViewData["PageDescription"] is string pageDescription && !string.IsNullOrWhiteSpace(pageDescription))
+                    {
+                        <p class="page-description">@pageDescription</p>
+                    }
+                </div>
+                @if (IsSectionDefined("PageActions"))
+                {
+                    <div class="page-header-actions">
+                        @RenderSection("PageActions", required: false)
+                    </div>
+                }
+            </header>
+
+            <section class="page-content" aria-label="Conteúdo da página">
+                @RenderBody()
+            </section>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container app-footer-inner">
+            <span>Gestão de orçamentos</span>
+            <span>Organização simples para o dia a dia</span>
         </div>
     </footer>
+
     <script src="~/js/consulta-cep.js" asp-append-version="true" defer></script>
 </body>
 </html>

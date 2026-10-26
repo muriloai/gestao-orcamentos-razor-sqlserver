@@ -1,12 +1,13 @@
 @model OrcamentoFormulario
 @{
     ViewData["Title"] = $"Editar orçamento {Model.Id:D6}";
+    ViewData["PageDescription"] = "Revise os dados e os itens antes de salvar as alterações.";
 }
-
-<h1 class="h2 mb-4">Editar orçamento @Model.Id.ToString("D6")</h1>
 
 <form asp-action="Editar" asp-route-id="@Model.Id" method="post">
     <partial name="_Formulario" model="Model" />
-    <button type="submit" class="btn btn-primary">Salvar alterações</button>
-    <a asp-action="Detalhes" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar alterações</button>
+        <a asp-action="Detalhes" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
 </form>

@@ -1,15 +1,98 @@
-body {
-  color: #212529;
+body.print-shell {
+  min-height: 100vh;
+  background: var(--color-canvas);
 }
 
-.dados-parte dd,
+.print-page {
+  max-width: 62rem;
+  margin-block: 2.5rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-panel);
+}
+
+.print-header {
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.print-header .page-description {
+  margin-bottom: 0.9rem;
+}
+
+.print-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.8rem;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-soft);
+  color: var(--color-text-muted);
+  font-size: 0.76rem;
+  font-weight: 650;
+}
+
+.print-section {
+  margin-block: 1.6rem;
+}
+
+.print-section h2 {
+  margin: 0 0 0.8rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.print-section dl.row {
+  margin-bottom: 0;
+}
+
+.print-section dd,
 .observacoes p {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
 
-.table {
+.print-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2.5rem;
+  margin-block: 1.5rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-soft);
+}
+
+.print-dates p {
+  margin: 0;
+}
+
+.print-table {
   table-layout: fixed;
+  border-color: var(--color-border);
+}
+
+.print-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 0.9rem;
+}
+
+.print-table thead th {
+  background: var(--color-surface-accent);
+  color: var(--color-primary-hover);
+}
+
+.print-table td:not(.valor),
+.print-table th:not(.valor) {
+  overflow-wrap: anywhere;
 }
 
 .col-descricao {
@@ -28,13 +111,24 @@ body {
   width: 18%;
 }
 
-.table td:not(.valor),
-.table th:not(.valor) {
-  overflow-wrap: anywhere;
-}
-
 .valor {
   white-space: nowrap;
+}
+
+.observacoes {
+  margin-top: 1.6rem;
+}
+
+@media (max-width: 575.98px) {
+  .print-page {
+    margin-block: 1rem;
+    padding: 1.1rem;
+    border-radius: 0.9rem;
+  }
+
+  .print-table {
+    min-width: 42rem;
+  }
 }
 
 @media print {
@@ -43,36 +137,59 @@ body {
     margin: 15mm;
   }
 
+  body.print-shell {
+    min-height: 0;
+    background: #fff;
+  }
+
   .acoes-impressao {
     display: none !important;
   }
 
-  main.container {
+  main.container.print-page {
     max-width: none;
-    padding: 0 !important;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: none;
   }
 
-  .dados-parte,
-  .observacoes,
-  tr {
+  .print-header,
+  .print-section,
+  .print-dates,
+  .print-table tr {
     break-inside: avoid;
     page-break-inside: avoid;
   }
 
-  thead {
-    display: table-header-group;
+  .print-header {
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.9rem;
   }
 
-  tfoot {
-    display: table-row-group;
-  }
-
-  .table {
+  .print-table {
     width: 100%;
+    min-width: 0;
     font-size: 0.8rem;
   }
 
-  .table > :not(caption) > * > * {
+  .print-table-wrap {
+    overflow: visible;
+    border: 0;
+  }
+
+  .print-table > :not(caption) > * > * {
     padding: 0.35rem;
+  }
+
+  .print-table thead {
+    display: table-header-group;
+  }
+
+  .print-table tfoot {
+    display: table-row-group;
   }
 }

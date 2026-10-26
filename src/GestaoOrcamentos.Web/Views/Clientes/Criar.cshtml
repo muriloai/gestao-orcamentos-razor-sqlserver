@@ -1,16 +1,17 @@
 @model ClienteFormulario
 @{
     ViewData["Title"] = "Cadastrar cliente";
+    ViewData["PageDescription"] = "Adicione os dados de contato e endereço para criar uma nova ficha.";
 }
 
 <div class="row justify-content-center">
     <div class="col-lg-8">
-        <h1 class="h2 mb-3">Cadastrar cliente</h1>
-
         <form asp-action="Criar" method="post">
             <partial name="_Campos" model="Model" />
-            <button type="submit" class="btn btn-primary">Salvar cliente</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar cliente</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+            </div>
         </form>
     </div>
 </div>

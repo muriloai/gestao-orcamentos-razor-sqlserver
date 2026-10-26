@@ -1,12 +1,13 @@
 @model OrcamentoFormulario
 @{
     ViewData["Title"] = "Novo orçamento";
+    ViewData["PageDescription"] = "Monte uma proposta com os dados do cliente, itens e condições.";
 }
-
-<h1 class="h2 mb-4">Novo orçamento</h1>
 
 <form asp-action="Criar" method="post">
     <partial name="_Formulario" model="Model" />
-    <button type="submit" class="btn btn-primary">Salvar orçamento</button>
-    <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Salvar orçamento</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Voltar</a>
+    </div>
 </form>

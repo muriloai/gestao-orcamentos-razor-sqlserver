@@ -10,22 +10,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Orçamento @orcamento.Numero - Impressão</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/impressao.css" asp-append-version="true" />
 </head>
-<body>
-    <main class="container py-4">
+<body class="print-shell">
+    <main class="container print-page">
         <div class="acoes-impressao d-flex gap-2 mb-4">
             <button type="button" class="btn btn-primary" onclick="window.print()">Imprimir ou salvar em PDF</button>
             <a asp-action="Detalhes" asp-route-id="@orcamento.Id" class="btn btn-outline-secondary">Voltar ao orçamento</a>
         </div>
 
-        <header class="mb-4">
-            <h1 class="h2">Orçamento @orcamento.Numero</h1>
-            <p class="mb-0">@orcamento.Titulo</p>
-            <p class="text-muted mb-0">@orcamento.SituacaoTexto</p>
+        <header class="print-header">
+            <p class="page-eyebrow">Gestão do negócio</p>
+            <h1 class="page-title">Orçamento @orcamento.Numero</h1>
+            <p class="page-description">@orcamento.Titulo</p>
+            <span class="print-status">@orcamento.SituacaoTexto</span>
         </header>
 
-        <section class="dados-parte mb-3" aria-labelledby="titulo-negocio">
+        <section class="dados-parte print-section" aria-labelledby="titulo-negocio">
             <h2 id="titulo-negocio" class="h5">Negócio</h2>
             @if (Model.Negocio is null)
             {
@@ -37,53 +39,55 @@
             }
         </section>
 
-        <section class="dados-parte mb-3" aria-labelledby="titulo-cliente">
+        <section class="dados-parte print-section" aria-labelledby="titulo-cliente">
             <h2 id="titulo-cliente" class="h5">Cliente</h2>
             <partial name="_DadosParte" model="Model.Cliente" />
         </section>
 
-        <section class="mb-4" aria-label="Datas do orçamento">
+        <section class="print-dates" aria-label="Datas do orçamento">
             <p class="mb-1"><strong>Emissão:</strong> @orcamento.DataEmissao.ToString("dd/MM/yyyy")</p>
             <p class="mb-0"><strong>Validade:</strong> @(orcamento.Validade?.ToString("dd/MM/yyyy") ?? "Não informada")</p>
         </section>
 
-        <table class="table table-bordered align-middle">
-            <colgroup>
-                <col class="col-descricao" />
-                <col class="col-quantidade" />
-                <col class="col-unidade" />
-                <col class="col-valor" />
-                <col class="col-valor" />
-            </colgroup>
-            <thead>
-                <tr>
-                    <th scope="col">Descrição</th>
-                    <th scope="col" class="text-end">Quantidade</th>
-                    <th scope="col">Unidade</th>
-                    <th scope="col" class="text-end">Preço unitário</th>
-                    <th scope="col" class="text-end">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in orcamento.Itens.OrderBy(item => item.Id))
-                {
+        <div class="print-table-wrap">
+            <table class="table app-table print-table">
+                <colgroup>
+                    <col class="col-descricao" />
+                    <col class="col-quantidade" />
+                    <col class="col-unidade" />
+                    <col class="col-valor" />
+                    <col class="col-valor" />
+                </colgroup>
+                <thead>
                     <tr>
-                        <td>@item.Descricao</td>
-                        <td class="text-end valor">@item.Quantidade.ToString("0.###")</td>
-                        <td>@item.Unidade</td>
-                        <td class="text-end valor">@item.PrecoUnitario.ToString("C")</td>
-                        <td class="text-end valor">@item.Subtotal.ToString("C")</td>
+                        <th scope="col">Descrição</th>
+                        <th scope="col" class="text-end">Quantidade</th>
+                        <th scope="col">Unidade</th>
+                        <th scope="col" class="text-end">Preço unitário</th>
+                        <th scope="col" class="text-end">Subtotal</th>
                     </tr>
-                }
-            </tbody>
-            <tfoot>
-                <tr><th scope="row" colspan="4" class="text-end">Total</th><td class="text-end fw-bold valor">@orcamento.Total.ToString("C")</td></tr>
-            </tfoot>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in orcamento.Itens.OrderBy(item => item.Id))
+                    {
+                        <tr>
+                            <td>@item.Descricao</td>
+                            <td class="text-end valor">@item.Quantidade.ToString("0.###")</td>
+                            <td>@item.Unidade</td>
+                            <td class="text-end valor">@item.PrecoUnitario.ToString("C")</td>
+                            <td class="text-end valor">@item.Subtotal.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr><th scope="row" colspan="4" class="text-end">Total</th><td class="text-end fw-bold valor">@orcamento.Total.ToString("C")</td></tr>
+                </tfoot>
+            </table>
+        </div>
 
         @if (!string.IsNullOrWhiteSpace(orcamento.Observacoes))
         {
-            <section class="observacoes mt-4" aria-labelledby="titulo-observacoes">
+            <section class="observacoes print-section" aria-labelledby="titulo-observacoes">
                 <h2 id="titulo-observacoes" class="h5">Observações</h2>
                 <p>@orcamento.Observacoes</p>
             </section>

@@ -1,9 +1,28 @@
 ﻿@{
     ViewData["Title"] = "Início";
+    ViewData["PageHeading"] = "Gestão de orçamentos";
+    ViewData["PageDescription"] = "Tenha clientes e propostas organizados em um só lugar.";
+    ViewData["PageSection"] = "VISÃO GERAL";
 }
 
-<section class="py-5">
-    <h1 class="display-5 fw-semibold">Gestão de orçamentos</h1>
-    <p class="lead text-secondary">Aplicação local para organizar o trabalho do seu negócio.</p>
-    <a class="btn btn-primary" asp-controller="Clientes" asp-action="Index">Ver clientes</a>
+<section class="home-intro" aria-labelledby="home-intro-title">
+    <h2 id="home-intro-title">Acesso rápido</h2>
+    <p>Escolha por onde começar e mantenha as informações do seu negócio em ordem.</p>
+
+    <div class="home-links">
+        <a class="home-link-card" asp-controller="Clientes" asp-action="Index">
+            <span>
+                <span class="home-link-title">Clientes</span>
+                <span class="home-link-description">Consulte contatos e cadastre novos clientes.</span>
+            </span>
+            <span class="home-link-arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="home-link-card" asp-controller="Orcamentos" asp-action="Index">
+            <span>
+                <span class="home-link-title">Orçamentos</span>
+                <span class="home-link-description">Crie propostas e acompanhe cada etapa.</span>
+            </span>
+            <span class="home-link-arrow" aria-hidden="true">→</span>
+        </a>
+    </div>
 </section>

@@ -1,6 +1,7 @@
 @model ClientesLista
 @{
     ViewData["Title"] = "Clientes";
+    ViewData["PageDescription"] = "Mantenha os contatos e as informações do seu negócio sempre organizados.";
 }
 
 @if (TempData["Mensagem"] is string mensagem)
@@ -8,12 +9,11 @@
     <div class="alert alert-success" role="status">@mensagem</div>
 }
 
-<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
-    <h1 class="h2 mb-0">Clientes</h1>
+@section PageActions {
     <a asp-action="Criar" class="btn btn-primary">Cadastrar cliente</a>
-</div>
+}
 
-<form asp-action="Index" method="get" class="row g-2 mb-4" role="search">
+<form asp-action="Index" method="get" class="row g-2 filter-form" role="search">
     <div class="col-sm-8 col-md-6">
         <label for="busca" class="form-label">Pesquisar por nome</label>
         <input id="busca" name="busca" value="@Model.Busca" class="form-control" />
@@ -25,12 +25,12 @@
 
 @if (Model.Clientes.Count == 0)
 {
-    <p>Nenhum cliente encontrado.</p>
+    <p class="empty-state">Nenhum cliente encontrado.</p>
 }
 else
 {
     <div class="table-responsive">
-        <table class="table table-striped align-middle">
+        <table class="table app-table">
             <thead>
                 <tr>
                     <th scope="col">Nome</th>
