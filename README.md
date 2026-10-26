@@ -1,6 +1,8 @@
 ## Sumário
 
-- [Gestão de orçamentos](#gesto-de-oramentos)
+- [Projeto: Gestão de Orçamentos](#projeto-gesto-de-oramentos)
+- [Fluxo funcional da aplicação](#fluxo-funcional-da-aplicao)
+  - [Imagens da aplicação](#imagens-da-aplicao)
   - [O que a aplicação faz?](#o-que-a-aplicao-faz)
   - [Arquitetura e escolhas técnicas](#arquitetura-e-escolhas-tcnicas)
     - [Padrões e modelos](#padres-e-modelos)
@@ -8,7 +10,6 @@
   - [Fluxo dos orçamentos](#fluxo-dos-oramentos)
   - [API de consulta](#api-de-consulta)
   - [Medição da consulta de vencimentos](#medio-da-consulta-de-vencimentos)
-  - [Imagens da aplicação](#imagens-da-aplicao)
   - [Requisitos e desenvolvimento](#requisitos-e-desenvolvimento)
   - [Publicar no Windows x64](#publicar-no-windows-x64)
   - [Testes](#testes)
@@ -17,7 +18,9 @@
 
 # Projeto: Gestão de Orçamentos
 
-A proposta deste projeto é demonstrar, em uma aplicação funcional, como estes recursos do ASP.NET Core e do SQL Server podem trabalhar juntos:
+O foco técnico desta solução é demonstrar engenharia aplicada em ASP.NET Core 10 e SQL Server, com responsabilidades bem separadas, API HTTP e processamento em segundo plano. Em um cenário com 100 mil orçamentos fictícios, a otimização da consulta de vencimentos reduziu as leituras lógicas de 1.044 para 7 com um índice filtrado.
+
+Constatando como estes recursos do ASP.NET Core e do SQL Server podem trabalhar da melhor maneira juntos:
 
 - MVC e Razor Pages;
 - API HTTP;
@@ -27,11 +30,11 @@ A proposta deste projeto é demonstrar, em uma aplicação funcional, como estes
 - Integração com um serviço externo;
 - Layout centralizado perante hierarquia de estilos e foco em ser clean.
 
-O aplicativo foi pensado para uso pessoal, não contemplando segurança aprimorada e nem login.
+Esta solução foi pensada para uso pessoal, não contemplando segurança aprimorada e nem login.
 
 # Fluxo funcional da aplicação
 
-Esta aplicação vem para organizar clientes e acompanhar orçamentos, desde a criação até a aprovação ou recusa, sendo assim, o fluxo também guarda os dados do cliente e do negócio que foram apresentados quando a proposta foi enviada, para que depois as alterações nos cadastros não mudem o histórico.
+Esta aplicação é voltada a organizar clientes e acompanhar orçamentos, desde a criação até a aprovação ou recusa, sendo assim, o fluxo também guarda os dados do cliente e do negócio que foram apresentados quando a proposta foi enviada, para que depois as alterações nos cadastros não mudem o histórico.
 
 ## Imagens da aplicação
 
