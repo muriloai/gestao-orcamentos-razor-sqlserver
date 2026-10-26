@@ -15,22 +15,37 @@
 
 ---
 
-# Gestão de orçamentos
+# Projeto: Gestão de Orçamentos
 
-Esta aplicação vem para organizar clientes e acompanhar orçamentos, desde a criação até a aprovação ou recusa.
-
-O fluxo também guarda os dados do cliente e do negócio que foram apresentados quando a proposta foi enviada, para que depois as alterações nos cadastros não mudem o histórico.
-
-A proposta do projeto é resolver esse fluxo de trabalho e demonstrar, em uma aplicação funcional, como estes recursos do ASP.NET Core e do SQL Server podem trabalhar juntos:
+A proposta deste projeto é demonstrar, em uma aplicação funcional, como estes recursos do ASP.NET Core e do SQL Server podem trabalhar juntos:
 
 - MVC e Razor Pages;
 - API HTTP;
 - Persistência com Entity Framework Core;
-- Consultas SQL
-- Tarefas em segundo plano
-- Integração com um serviço externo.
+- Consultas SQL;
+- Tarefas em segundo plano;
+- Integração com um serviço externo;
+- Layout centralizado perante hierarquia de estilos e foco em ser clean.
 
-O aplicativo foi pensado para uso pessoal no próprio computador, sem login, além disso, o servidor escuta em interfaces de loopback e a aplicação usa `pt-BR`.
+O aplicativo foi pensado para uso pessoal, não contemplando segurança aprimorada e nem login.
+
+# Fluxo funcional da aplicação
+
+Esta aplicação vem para organizar clientes e acompanhar orçamentos, desde a criação até a aprovação ou recusa, sendo assim, o fluxo também guarda os dados do cliente e do negócio que foram apresentados quando a proposta foi enviada, para que depois as alterações nos cadastros não mudem o histórico.
+
+## Imagens da aplicação
+
+As imagens mostram o aplicativo em execução com dados fictícios.
+
+![Lista de clientes](docs/screenshots/clientes.png)
+
+![Cadastro de cliente com consulta de CEP](docs/screenshots/novo-cliente.png)
+
+![Lista de orçamentos](docs/screenshots/orcamentos.png)
+
+![Relatório por período](docs/screenshots/relatorio.png)
+
+![Alertas de orçamentos vencidos](docs/screenshots/orcamentos-vencidos.png)
 
 ## O que a aplicação faz?
 
@@ -128,20 +143,6 @@ Conforme iremos criar vários orçamentos que nunca serão finalizamos, esta par
 | --------------------- | -------------------- | -----------: | ---------------: | --------------------------: |
 | Sem o índice          | Clustered Index Scan |      100.000 |            1.044 |               16 ms / 16 ms |
 | Com o índice filtrado | Index Seek           |        2.500 |                7 | 0 ms / 0 ms (menor que 1ms) |
-
-## Imagens da aplicação
-
-As imagens mostram o aplicativo em execução com dados fictícios.
-
-![Lista de clientes](docs/screenshots/clientes.png)
-
-![Cadastro de cliente com consulta de CEP](docs/screenshots/novo-cliente.png)
-
-![Lista de orçamentos](docs/screenshots/orcamentos.png)
-
-![Relatório por período](docs/screenshots/relatorio.png)
-
-![Alertas de orçamentos vencidos](docs/screenshots/orcamentos-vencidos.png)
 
 ## Requisitos e desenvolvimento
 
