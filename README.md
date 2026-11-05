@@ -1,22 +1,41 @@
+## Sumário
+
+- [Projeto: Gestão de Orçamentos](#projeto-gesto-de-oramentos)
+  - [O que é o projeto](#o-que-e-o-projeto)
+  - [Problema que resolve](#problema-que-resolve)
+  - [Objetivo](#objetivo)
+- [Fluxo funcional da aplicação](#fluxo-funcional-da-aplicao)
+  - [Imagens da aplicação](#imagens-da-aplicao)
+  - [O que a aplicação faz?](#o-que-a-aplicao-faz)
+  - [Arquitetura e escolhas técnicas](#arquitetura-e-escolhas-tcnicas)
+    - [Padrões e modelos](#padres-e-modelos)
+    - [Persistência e processamento](#persistncia-e-processamento)
+  - [Fluxo dos orçamentos](#fluxo-dos-oramentos)
+  - [API de consulta](#api-de-consulta)
+  - [Medição da consulta de vencimentos](#medio-da-consulta-de-vencimentos)
+  - [Requisitos e desenvolvimento](#requisitos-e-desenvolvimento)
+  - [Publicar no Windows x64](#publicar-no-windows-x64)
+  - [Testes](#testes)
+
+---
+
 # Projeto: Gestão de Orçamentos
 
-O **foco técnico** desta solução é demonstrar engenharia aplicada em ASP.NET Core 10 e SQL Server, com responsabilidades bem separadas, API HTTP e processamento em segundo plano. Em um cenário com 100 mil orçamentos fictícios, a otimização da consulta de vencimentos reduziu as leituras lógicas de 1.044 para 7 com um índice filtrado.
+## O que é o projeto
 
-Constatando como estes recursos do ASP.NET Core e do SQL Server podem trabalhar da melhor maneira juntos:
+É um aplicativo web em C# para cadastrar clientes e acompanhar orçamentos. Usa ASP.NET Core 10, Razor, Entity Framework Core e SQL Server; no desenvolvimento, usa SQL Server LocalDB. Também oferece uma API para consulta de clientes e endereços.
 
-- **MVC** e **Razor Pages**;
-- **API** HTTP;
-- **Persistência** com Entity Framework Core;
-- **Consultas SQL**;
-- Tarefas em **segundo plano**;
-- Integração com um **serviço externo**;
-- **Layout centralizado** perante hierarquia de estilos e foco em ser clean.
+## Problema que resolve
 
-Esta solução foi pensada para uso pessoal, **não** contemplando segurança aprimorada e nem login.
+Quem prepara propostas precisa acompanhar cliente, itens, valores, validade e resposta. Também precisa consultar os dados enviados mesmo que o cadastro mude depois e localizar propostas pendentes cuja validade passou. O sistema reúne essas informações em cada orçamento, preserva os dados do envio e apresenta os vencidos.
+
+## Objetivo
+
+Centralizar o ciclo do orçamento, do rascunho à aprovação ou recusa, e facilitar o acompanhamento dos vencimentos, dos relatórios e das propostas para impressão. O aplicativo foi concebido para uso pessoal e não inclui login nem controles avançados de segurança.
 
 # Fluxo funcional da aplicação
 
-Esta aplicação é voltada a organizar clientes e acompanhar orçamentos, desde a criação até a aprovação ou recusa, sendo assim, o fluxo também guarda os dados do cliente e do negócio que foram apresentados quando a proposta foi enviada, para que depois as alterações nos cadastros não mudem o histórico.
+O operador cria o orçamento, envia a proposta e acompanha sua situação até a aprovação ou recusa. O sistema conserva os dados apresentados no envio, mesmo que os cadastros sejam alterados depois.
 
 ## Imagens da aplicação
 
@@ -31,6 +50,8 @@ As imagens mostram o aplicativo em execução com dados fictícios.
 ![Relatório por período](docs/screenshots/relatorio.png)
 
 ![Alertas de orçamentos vencidos](docs/screenshots/orcamentos-vencidos.png)
+
+[Reproduzir a consulta](docs/performance/medir-indice-vencidos.ps1)
 
 ## O que a aplicação faz?
 
@@ -53,26 +74,34 @@ As pastas agrupam responsabilidades que colaboram nesses fluxos:
 - `Data` contém o `GestaoOrcamentosDbContext` e as migrations do Entity Framework Core;
 - `wwwroot` contém CSS, JavaScript e outros arquivos estáticos da interface.
 
-O fluxo mais comum parte de um controller, passa por um serviço e chega ao banco pelo `DbContext`. A página de configurações usa o `DbContext` diretamente. As respostas MVC são renderizadas pelas Views, e as respostas da API são serializadas como JSON.
+Os controllers MVC usam serviços e retornam Views Razor. A API retorna JSON, e a página de configurações acessa o `DbContext` diretamente. Um worker em segundo plano chama o serviço de alertas na inicialização e a cada minuto.
 
 ```mermaid
 flowchart LR
-    A["Requisição HTTP"] --> B["Controllers MVC e API"]
-    A --> P["Razor Page de configurações"]
-    B --> C["Services"]
-    C --> D["GestaoOrcamentosDbContext"]
-    P --> D
-    D --> E[("SQL Server")]
-    B --> F["Views Razor"]
-    F --> G["HTML"]
-    B --> H["DTOs da API"]
-    H --> I["JSON"]
-    B --> J["ViaCepClient"]
-    J --> K["ViaCEP"]
-    L["AlertaOrcamentoWorker"] --> C
-```
+    operador["Operador no navegador"] --> mvc["Controllers MVC"]
+    mvc --> views["Views Razor · HTML"]
+    views --> operador
+    operador --> configuracoes["Razor Page de configurações"]
 
-[Navegue por este diagrama](https://dataxstudios.com.br/br/apps/markdown-studio/#c=VZBBbsIwEEX3PcVoVu2CK1QKDhDS0LhJRBcjFm4YqNU0bm1Tql6nC07QE-RiVUxAsBv9__znjzeN2devynrIihsAgIiw4M-ddro7dL8GkqqSuILR6B7GhMK03pqmYetgsRTAEMk5ro4vAyQJC_VjLEi1ZVgz1Kbd6O3Oqu7Q_bEb4HGABWHJ9kvXZ10EPSacsfPK5LZW79x64-KXfjd_-wGURzDMcZgndIvlUwZ9Ilu8u1w0JVxq3jsI3YaIabBmhEm1yK56JYRxlTtYq4v7kmDNCdMyf7zC0z5dCf4Qjeb21DAN3sPRm8hBzQijhq1X59OejX1jO_yx-Ac)
+    consumidor["Consumidor da API"] --> clientesApi["ClientesApiController"]
+    clientesApi --> resposta["DTOs · JSON"]
+    resposta --> consumidor
+    clientesApi --> clienteService["ClienteService"]
+    consumidor --> enderecosApi["EnderecosApiController"]
+    enderecosApi --> resposta
+    enderecosApi --> viaCepClient["ViaCepClient"]
+    viaCepClient --> viaCep["ViaCEP"]
+
+    mvc --> servicos["Serviços de clientes, orçamentos, relatórios e alertas"]
+    worker["AlertaOrcamentoWorker"] --> escopo["Escopo de DI por ciclo"]
+    escopo --> alertas["AlertasOrcamentoService"]
+    servicos --> dbcontext["EF Core · GestaoOrcamentosDbContext"]
+    clienteService --> dbcontext
+    alertas --> dbcontext
+    configuracoes --> dbcontext
+    dbcontext --> sqlserver[("SQL Server")]
+    sqlserver --> objetos["Tabelas · views · procedure · função · índice"]
+```
 
 ### Padrões e modelos
 
@@ -122,23 +151,53 @@ Em ambiente de desenvolvimento, o documento OpenAPI fica em `/openapi/v1.json`. 
 
 ## Medição da consulta de vencimentos
 
-Conforme iremos criar vários orçamentos que nunca serão finalizamos, esta parte do sistema acaba se sendo mais requisitada, repare bem nesta consulta de vencimentos: `SELECT COUNT_BIG(*) FROM dbo.fn_OrcamentosVencidos('2026-10-16')`, fiz uma verificação técnica do efeito do índice `IX_Orcamentos_Pendente_Validade` usando um script de powershell + SQL Server LocalDB com um banco temporário com 100.000 orçamentos fictícios: 5.000 pendentes, dos quais 2.500 vencidos, com e sem o índice, e aqui estão os dados obtidos:
+O alerta lista orçamentos pendentes cuja validade é anterior à data de referência. O script abaixo compara a consulta da função `fn_OrcamentosVencidos` com e sem o índice filtrado `IX_Orcamentos_Pendente_Validade`, em um banco LocalDB descartável.
 
-| Estado                | Operador             | Linhas lidas | Leituras lógicas |       CPU / tempo decorrido |
-| --------------------- | -------------------- | -----------: | ---------------: | --------------------------: |
-| Sem o índice          | Clustered Index Scan |      100.000 |            1.044 |               16 ms / 16 ms |
-| Com o índice filtrado | Index Seek           |        2.500 |                7 | 0 ms / 0 ms (menor que 1ms) |
+Na medição original, com data de referência fixa em 16/10/2026 e 100.000 orçamentos, os resultados foram:
+
+| Caso                  | Operador             | Linhas lidas | Leituras lógicas | CPU / decorrido |
+| --------------------- | -------------------- | -----------: | ---------------: | --------------: |
+| Sem o índice          | Clustered Index Scan |      100.000 |            1.044 | 16 ms / 16 ms   |
+| Com o índice filtrado | Index Seek           |        2.500 |                7 | < 1 ms / < 1 ms |
+
+Na execução reproduzida em 04/11/2026, a consulta retornou os mesmos 2.500 IDs nos dois casos e repetiu as leituras lógicas. `STATISTICS TIME` registrou:
+
+| Caso                  | Linhas lidas | Leituras lógicas | CPU / decorrido |
+| --------------------- | -----------: | ---------------: | --------------: |
+| Sem o índice          |      100.000 |            1.044 | 16 ms / 34 ms   |
+| Com o índice filtrado |        2.500 |                7 | 0 ms / 3 ms     |
+
+A primeira tabela conserva os tempos da medição original. Cada nova execução imprime seus próprios valores — operador, linhas lidas, leituras lógicas, CPU e tempo decorrido — e atualiza os dois planos reais em `docs/performance/plano-sem-indice.sqlplan` e `docs/performance/plano-com-indice.sqlplan`.
+
+### Reproduzir
+
+Pré-requisitos: Windows com SQL Server LocalDB e instância `MSSQLLocalDB`, SDK .NET 10, `dotnet-ef` 10.x disponível no `PATH` e PowerShell 5.1 ou superior. Para instalar a ferramenta EF Core, se necessário:
+
+```powershell
+dotnet tool install --global dotnet-ef
+```
+
+Na raiz do repositório, execute:
+
+```powershell
+.\docs\performance\medir-indice-vencidos.ps1
+```
+
+O script cria um banco com nome aleatório, aplica as migrations, carrega a massa, executa a consulta nos dois casos com `SET STATISTICS IO ON` e plano de execução real, confere os IDs e remove o banco ao terminar. A massa tem 100.000 IDs determinísticos, 5.000 pendentes e 2.500 vencidos em relação a 16/10/2026; também inclui 2.000 validades exatamente nessa data e 500 validades nulas para conferir os limites. Os 2.500 IDs esperados são múltiplos de 40 entre 40 e 100.000.
+
+A saída confirma que os conjuntos e as contagens coincidem, e mostra as métricas de cada caso. CPU e tempo decorrido variam entre execuções e máquinas; os planos reais ficam salvos na pasta `docs/performance`. O SQL executado está em [`consulta-vencidos.sql`](docs/performance/consulta-vencidos.sql), e a carga e as verificações da massa estão em [`medir-indice-vencidos.sql`](docs/performance/medir-indice-vencidos.sql).
+
+O índice reduz leituras ao manter apenas linhas pendentes com validade definida, ordenadas por validade e ID. Essa economia na consulta tem custo de escrita: inserir ou excluir um orçamento que atende ao filtro, mudar sua situação para dentro ou para fora dele, ou alterar sua validade exige inserir, remover ou atualizar uma entrada do índice. O índice também ocupa armazenamento e acrescenta trabalho de I/O às operações que o modificam.
 
 ## Requisitos e desenvolvimento
 
 - SDK do .NET 10;
 - SQL Server LocalDB.
 
-Confirme que a instância LocalDB está instalada e que a conexão funciona:
+Confirme que a instância LocalDB está instalada:
 
 ```powershell
 SqlLocalDB info MSSQLLocalDB
-sqlcmd -S '(localdb)\MSSQLLocalDB' -E -Q 'SELECT 1'
 ```
 
 A conexão de desenvolvimento está em `src/GestaoOrcamentos.Web/appsettings.Development.json` e usa autenticação integrada do Windows. Para criar ou atualizar o banco, use o Console do Gerenciador de Pacotes do Visual Studio, selecionando `GestaoOrcamentos.Web` como projeto padrão:
